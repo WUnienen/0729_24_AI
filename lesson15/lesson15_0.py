@@ -3,6 +3,7 @@ from requests import Response
 from pprint import pprint
 from pydantic import BaseModel, RootModel, Field,field_validator, field_serializer
 from datetime import datetime
+import pandas as pd
 
 youbike_url = 'https://data.ntpc.gov.tw/api/datasets/c51d5111-c300-44c9-b4f1-4b28b9929ca2/json?size=1000'
 try:
@@ -39,4 +40,7 @@ class Companys(RootModel):
 
 companys: Companys = Companys.model_validate_json(content)
 companys_list = companys.model_dump()
-pprint(companys_list)
+
+df=pd.DataFrame(data=companys_list)
+df.to_csv('companys_output.csv',index=False,encoding='utf-8')
+df.to_excel('companys_output.xlsx',index=False)
